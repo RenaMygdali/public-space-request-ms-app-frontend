@@ -1,6 +1,6 @@
 # Public Space Maintenance Request Management System (PSM-RMS)
 
-This project is the frontend of, an under construction, Public Space Maintenance Request Management System app built with Angular.
+This project is the frontend of a (under construction) Public Space Maintenance Request Management System app built with Angular.
 The application allows citizens to submit requests related to public cleanliness and green spaces issues, which are then managed by officers.
 Admins have oversight and control over the application.
 
