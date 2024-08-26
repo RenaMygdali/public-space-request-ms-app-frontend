@@ -1,0 +1,98 @@
+<p class="fs-3 bg-light p-4">Submitted Requests</p>
+<div class="departments-container ps-2">
+
+   <!--Select Filters-->
+   <div class="position-relative">
+      <div class="d-flex flex-row flex-wrap gap-1 border-1 border-dark-subtle mb-2 mt-4">
+         <label>
+         Title
+         <input type="text" [(ngModel)]="filters.title" (input)="onFilterChange()" class="form-control" />
+         </label>
+         <label>
+         Status
+         <select [(ngModel)]="filters.status" (change)="onFilterChange()" class="form-select">
+            <option *ngFor="let status of statusList" [value]="status">
+               {{ status }}
+            </option>
+         </select>
+         </label>
+      </div>
+   </div>
+
+   <p class="p-1 text-bg-primary fs-6 text-light">Double click on a request to see more details...</p>
+
+   <!--Table-->
+   <table class="table table-full-width">
+      <thead class="table-primary">
+        <tr>
+         <th role="button" (click)="sortData('createDate')">
+            Submitted at {{ sortSign('createDate') }}</th>
+         <th role="button" (click)="sortData('title')">
+            Title {{ sortSign('title') }}</th>
+          <th scope="col" role="button" (click)="sortData('status')">
+            Status {{ sortSign('status') }}</th>
+          <th class="text-wrap" scope="col" role="button" (click)="sortData('department')">Assigned Department {{ sortSign('department') }}</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of requests" (dblclick)="openRequestDetails(request)">
+         <td>{{ getFriendlyDate(request.createDate) }}</td>
+         <td>{{ request.title }}</td> 
+         <td>{{ statusMapping[request.status] }}</td>
+         <td>{{ request.assignedDepartmentTitle }}</td>
+         <td>
+            <button class="me-2 btn btn-warning"
+            (click)="openAssignModal(request)">
+               Assign
+            </button>
+         </td>
+        </tr>
+      </tbody>
+   </table>
+
+   <div *ngIf="requests.length === 0 && !loading && !error" class="text-danger mb-2">
+      No requests found.
+   </div>
+
+   <div *ngIf="error" class="text-danger mb-2">
+      Error loading requests. Please try again.
+   </div>
+
+   <!--Page navigation-->
+   <div>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(1)" [disabled]="pageNumber === 1">
+         First
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 1">
+         Previous
+      </button>
+      <span class="m-2">Page {{ pageNumber }} of {{ totalPages }}</span>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber === totalPages">
+         Next
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(totalPages)" [disabled]="pageNumber === totalPages">
+         Last
+      </button>
+    </div>
+</div>
+
+<!-- Assign Request Modal -->
+<div *ngIf="showAssignModal" class="assign-modal">
+   <div class="assign-content">
+      <h2>Assign Request</h2>
+      <form [formGroup]="assignRequestForm" (ngSubmit)="assignRequestToDepartment()">
+         <label for="department">to Department:</label>
+         <select id="department" formControlName="departmentId" class="form-select mb-3">
+            <option *ngFor="let department of departments" [value]="department.id">
+               {{ department.title }}
+            </option>
+         </select>
+         <div *ngIf="assignRequestForm.get('departmentId')?.invalid && assignRequestForm.get('departmentId')?.touched" class="text-danger">
+            Department selection is required.
+         </div>
+         <button type="submit" class="btn btn-success">Save</button>
+         <button type="button" (click)="closeAssignModal()" class="btn btn-danger ms-2">Cancel</button>
+      </form>
+   </div>
+</div>

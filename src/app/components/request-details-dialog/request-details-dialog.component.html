@@ -1,0 +1,11 @@
+<div>
+   <h2>Request Details</h2>
+   <p><strong>Title:</strong> {{ request.title }}</p>
+   <p><strong>Description:</strong> {{ request.description }}</p>
+   <p><strong>Status:</strong> {{ statusMapping[request.status] }}</p>
+   <p><strong>Created Date:</strong> {{ getFriendlyDate(request.createDate) }}</p>
+   <p><strong>Updated Date:</strong> {{ getFriendlyDate(request.updateDate) }}</p>
+   <p><strong>Citizen username:</strong> {{ request.citizenUsername }}</p>
+   <p><strong>Assigned Department Title:</strong> {{ request.assignedDepartmentTitle }}</p>
+   <button (click)="dialogRef.close()" class="btn btn-outline-primary">Close</button>
+ </div>

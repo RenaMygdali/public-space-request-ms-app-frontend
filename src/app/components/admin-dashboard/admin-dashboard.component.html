@@ -1,0 +1,13 @@
+<p class="mt-4 fs-5 fw-light d-flex p-2">
+  Welcome,&nbsp;
+  <span class="text-success fw-bolder">{{ username }}&nbsp;[admin]</span>
+</p>
+
+<div class="d-flex flex-row gap-2 mt-2">
+
+   <app-admin-list-menu class="text-start w-25"></app-admin-list-menu>
+
+   <div class="flex-grow-1 text-nowrap w-75">
+     <router-outlet></router-outlet>
+   </div>
+ </div>

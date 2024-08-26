@@ -1,0 +1,64 @@
+<div class="container">
+   <p class="fs-3 bg-light p-4">Submit your request</p>
+   <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" novalidate>
+      <!--Title-->
+      <div class="form-group mb-2">
+         <label for="title" class="mb-2 fs-6">Title</label>
+         <input 
+            type="text" 
+            class="form-control mb-2" 
+            id="title" 
+            formControlName="title" 
+            placeholder="Your title" 
+            required>
+         <div *ngIf="requestForm.get('title')?.invalid" class="text-danger">
+            <div *ngIf="requestForm.get('title')?.errors?.['maxlength']">
+               Title should not exceed 200 characters
+            </div>
+            <div *ngIf="requestForm.get('title')?.touched &&
+                        requestForm.get('title')?.errors?.['required']">
+               Title is required
+            </div>
+         </div>
+
+         <!--Description-->
+         <div class="form-group">
+            <label for="description" class="mb-2 mt-3 fs-6">Description</label>
+            <textarea 
+               class="form-control mb-2" 
+               id="description" 
+               formControlName="description" 
+               rows="4" 
+               placeholder="Your request" 
+               required>
+            </textarea>
+            <div *ngIf="requestForm.get('description')?.invalid" class="text-danger">
+               <div *ngIf="requestForm.get('description')?.errors?.['required'] &&
+                           requestForm.get('description')?.touched">
+                  Request description is required
+               </div>
+               <div *ngIf="requestForm.get('description')?.errors?.['maxlength']">
+                  Description should not exceed 1000 characters
+               </div>
+            </div>
+         </div>
+         <button 
+            type="submit" 
+            class="btn btn-primary mt-3" 
+            [disabled]="requestForm.invalid">
+            Submit
+         </button>
+      </div>
+   </form>
+
+   <!-- Successful request submit modal -->
+   <div *ngIf="showSuccessMessage" class="success-modal">
+      <div class="success-content">
+      <h2>SUCCESS</h2>
+      <p>Your request has been successfully submitted.</p>
+      <button (click)="closeModal()" class="close-btn">Close</button>
+      </div>
+   </div>
+
+</div>
+

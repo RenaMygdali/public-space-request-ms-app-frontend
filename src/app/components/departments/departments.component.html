@@ -1,0 +1,175 @@
+<p class="fs-3 bg-light p-4">Departments</p>
+<div class="departments-container">
+   
+   <!--Add new department input-->
+   <div class="position-relative">
+      <p class="mx-5 border-title">Add New Department</p>
+      <form [formGroup]="addDepartmentForm" (ngSubmit)="onAdd()" class="add-department mt-3 mb-3 d-flex flex-row justify-content-center align-items-center border border-1 border-dark-subtle p-3">
+         <label for="title" class="me-2">
+            Department Title:
+            </label>
+         <div class="me-2 d-flex flex-row align-items-center">
+            <input 
+               type="text" 
+               id="title" 
+               formControlName="title"
+               class="form-control"
+               (blur)="onBlur($event, 'title')"
+               (focus)="onFocus($event, 'title')"
+            />
+            <button type="submit" class="btn btn-success">
+               Add
+            </button>
+            <!-- Error Messages -->
+            <div *ngIf="addDepartmentForm.get('title')?.invalid" class="text-danger ms-2">
+               <div *ngIf="formSubmitted && 
+                           addDepartmentForm.get('title')?.errors?.['required']">
+                  Title is required.
+               </div>
+               <div *ngIf="addDepartmentForm.get('title')?.errors?.['maxlength']">
+                  Title should not exceed 50 characters.
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+
+
+   <!-- Add Success Modal -->
+   <div *ngIf="showAddSuccessMessage" class="add-modal">
+      <div class="add-content">
+         <h2>Department added successfully</h2>
+         <p>The department with title ''{{ addedDepartmentTitle }}'' was added successfully.</p>
+         <button (click)="closeAddSuccessModal()" class="btn btn-secondary button-close">Close</button>
+      </div>
+   </div>
+
+   <!--Select Filters-->
+   <div class="position-relative">
+      <div class="d-flex flex-row flex-wrap gap-1 border-1 border-dark-subtle mb-2 mt-2">
+         <!-- <p class="mx-5 border-title">Select Filters</p> -->
+         <label>
+         Title:
+         <input type="text" [(ngModel)]="filters.title" (input)="onFilterChange()" class="form-control"/>
+         </label>
+         <label>
+         Min Officers:
+         <input type="number" [(ngModel)]="filters.minOfficers" (input)="onFilterChange()" class="form-control"/>
+         </label>
+         <label>
+         Max Officers:
+         <input type="number" [(ngModel)]="filters.maxOfficers" (input)="onFilterChange()" class="form-control"/>
+         </label>
+         <label>
+         Min Requests:
+         <input type="number" [(ngModel)]="filters.minRequests" (input)="onFilterChange()" class="form-control"/>
+         </label>
+         <label>
+         Max Requests:
+         <input type="number" [(ngModel)]="filters.maxRequests" (input)="onFilterChange()" class="form-control"/>
+         </label>
+      </div>
+   </div>
+
+   <!--Table-->
+   <table class="table table-full-width">
+     <thead class="table-primary">
+       <tr>
+         <th role="button" (click)="sortData('title')">
+            Department Title {{ sortSign('title') }}
+         </th>
+         <th role="button" (click)="sortData('officers')">
+            Number of Officers {{ sortSign('officers') }}</th>
+         <th role="button" (click)="sortData('requests')">
+            Number of Requests {{ sortSign('requests') }}</th>
+         <th>Actions</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr *ngFor="let department of departments">
+         <td>{{ department.title }}</td>
+         <td>{{ department.officers?.length || 0 }}</td>
+         <td>{{ department.requests?.length || 0 }}</td>
+         <td>
+            <button class="me-2 btn btn-warning"
+            (click)="openEditModal(department)">
+               Edit
+            </button>
+            <button class="btn btn-danger" 
+               (click)="confirmDelete(department)">
+               Delete
+            </button>
+         </td>
+       </tr>
+     </tbody>
+   </table>
+
+   <div *ngIf="departments.length === 0 && !loading && !error" class="text-danger mb-2">
+      No departments found.
+   </div>
+
+
+   <div *ngIf="error" class="text-danger mb-2">
+      Error loading departments. Please try again.
+   </div>
+
+   <!--Page navigation-->
+   <div>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(1)" [disabled]="pageNumber === 1">
+         First
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 1">
+         Previous
+      </button>
+      <span class="m-2">Page {{ pageNumber }} of {{ totalPages }}</span>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber === totalPages">
+         Next
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(totalPages)" [disabled]="pageNumber === totalPages">
+         Last
+      </button>
+    </div>
+</div>
+
+   <!-- Edit Department Modal -->
+   <div *ngIf="showEditModal" class="edit-modal">
+      <div class="edit-content">
+         <h2>Edit Department</h2>
+         <form [formGroup]="editDepartmentForm" (ngSubmit)="updateDepartmentTitle()">
+            <div class="input-group">
+               <label for="editΤitle">New Title:</label>
+               <input 
+                  id="editΤitle" 
+                  formControlName="title"
+               />
+            </div>
+            <div *ngIf="editDepartmentForm.get('title')?.invalid && editDepartmentForm.get('title')?.touched" class="text-danger">
+               Title is required and should not exceed 50 characters.
+            </div>
+            <div class="button-container">
+               <button type="submit" class="btn btn-success">Save</button>
+               <button type="button" (click)="closeEditModal()" class="btn btn-secondary button-close">Cancel</button>
+            </div>
+         </form>
+      </div>
+   </div>
+
+   <!--Delete confirmation modal-->
+   <div *ngIf="showDeleteConfirmationMessage" class="delete-modal">
+      <div class="delete-content">
+         <h2>Delete Department</h2>
+         <p>Are you sure you want to delete ''{{ departmentToDelete?.title }}''</p>
+         <button (click)="onDelete()" class="btn btn-danger me-2">Yes</button>
+         <button (click)="cancelDelete()" class="btn btn-secondary">No</button>
+      </div>
+   </div>
+
+   <!--Delete success modal-->
+   <div *ngIf="showDeleteSucceessMessage" class="delete-modal">
+      <div class="delete-content">
+         <h2>Department was deleted</h2>
+         <p class="d-flex flex-wrap">The department with title ''{{ departmentToDelete?.title }}'' deleted successfully.</p>
+         <button (click)="closeDeleteSuccess()" class="btn btn-secondary button-close-delete">Close</button>
+      </div>
+   </div>
+   

@@ -1,0 +1,105 @@
+<p class="fs-3 bg-light p-4">Users</p>
+<div class="departments-container">
+
+   <!--Select Filters-->
+   <div class="position-relative">
+      <div class="d-flex flex-row flex-wrap gap-1 border-1 border-dark-subtle mb-2 mt-2">
+         <!-- <p class="mx-5 border-title">Select Filters</p> -->
+         <label>
+         Username
+         <input type="text" [(ngModel)]="filters.username" (input)="onFilterChange()" class="form-control"/>
+         </label>
+         <label>
+         Role
+         <select [(ngModel)]="filters.role" (change)="onFilterChange()" class="form-select">
+            <option *ngFor="let role of roles" [value]="role">
+               {{ role }}
+            </option>
+         </select>
+         </label>
+      </div>
+   </div>
+
+   <!--Table-->
+   <table class="table table-full-width">
+      <thead class="table-primary">
+        <tr>
+          <th role="button" (click)="sortData('username')">
+             Username {{ sortSign('username') }}
+          </th>
+          <th role="button" (click)="sortData('email')">
+             Email {{ sortSign('email') }}</th>
+          <th role="button" (click)="sortData('role')">
+             Role {{ sortSign('role') }}</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ rolesMapping[user.role] }}</td>
+          <td>
+             <button *ngIf="rolesMapping[user.role] == 'Officer'" class="me-2 btn btn-warning"
+             (click)="openAssignModal(user)">
+                Assign
+             </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+   <div *ngIf="users.length === 0 && !loading && !error" class="text-danger mb-2">
+      No users found.
+   </div>
+
+   <div *ngIf="error" class="text-danger mb-2">
+      Error loading users. Please try again.
+   </div>
+
+   <!--Page navigation-->
+   <div>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(1)" [disabled]="pageNumber === 1">
+         First
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 1">
+         Previous
+      </button>
+      <span class="m-2">Page {{ pageNumber }} of {{ totalPages }}</span>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber === totalPages">
+         Next
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(totalPages)" [disabled]="pageNumber === totalPages">
+         Last
+      </button>
+    </div>
+
+    <!-- Assign Officer Modal -->
+   <div *ngIf="showAssignModal" class="assign-modal">
+      <div class="assign-content">
+         <h2>Assign Officer &quot;{{ officerToAssign.username }}&quot;</h2>
+         <form [formGroup]="assignOfficerForm" (ngSubmit)="assignOfficerToDepartment()">
+            <label for="department">to Department:</label>
+            <select id="department" formControlName="departmentId" class="form-select mb-3">
+               <option *ngFor="let department of departments" [value]="department.id">
+                  {{ department.title }}
+               </option>
+            </select>
+            <div *ngIf="assignOfficerForm.get('departmentId')?.invalid && assignOfficerForm.get('departmentId')?.touched" class="text-danger mb-2">
+               Department selection is required.
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+            <button type="button" (click)="closeAssignModal()" class="btn btn-danger ms-2">Cancel</button>
+         </form>
+      </div>
+   </div>
+
+   <!--Assign success modal-->
+   <div *ngIf="showAssignSucceessMessage" class="success-modal">
+      <div class="success-content">
+      <h2 class="text-success fw-bold">SUCCESS</h2>
+      <p class="d-flex flex-wrap">The Officer &quot;{{ officerToAssign.username }}&quot; was assigned to department successfully.</p>
+      <button (click)="closeAssignSuccess()" class="btn btn-secondary button-close-delete">Close</button>
+      </div>
+   </div>
+</div>

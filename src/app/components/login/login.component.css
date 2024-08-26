@@ -1,0 +1,48 @@
+.login-title {
+   font-size: 1.3rem;
+}
+
+.form-group {
+   max-width: 600px;
+}
+
+.label {
+   min-width: 100px;
+   margin-bottom: 2px; /* Για καλύτερη απόσταση από το input */
+}
+
+.input-group {
+   flex: 1 1 45%;
+   min-width: 300px;
+   margin-bottom: 0.2rem; /* Για απόσταση μεταξύ των πεδίων */
+}
+
+.input-group input,
+.input-group select {
+   width: 100%; /* Για να καλύπτει όλο το πλάτος του container */
+   border-radius: 0; /* Για να έχουν όλα τα input το ίδιο border-radius */
+}
+
+.text-danger {
+   margin-top: 5px;
+   font-size: 0.875rem; /* Μικρότερο μέγεθος γραμματοσειράς για τα μηνύματα σφάλματος */
+}
+
+.btn {
+   width: 150px;
+}
+
+.link-primary {
+   cursor: pointer; /* Δείκτης χεριού όταν είναι πάνω από το link */
+   font-size: 1rem;
+ }
+ 
+ .link-primary:hover {
+   color: #0056b3; /* Σκούρο χρώμα όταν το ποντίκι είναι πάνω από το link */
+ }
+
+ @media (max-width: 768px) {
+   .input-group {
+      flex: 1 1 100%;
+   }
+}

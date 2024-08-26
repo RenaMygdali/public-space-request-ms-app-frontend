@@ -1,0 +1,13 @@
+<p class="mt-4 fs-5 fw-light d-flex p-2">
+  Welcome,&nbsp;
+  <span class="text-success fw-bolder">{{ username }}</span>
+</p>
+
+<div class="d-flex flex-row gap-2 mt-2">
+
+   <app-citizen-list-menu class="text-start w-25"></app-citizen-list-menu>
+
+   <div class="flex-grow-1 text-nowrap w-75">
+     <router-outlet></router-outlet>
+   </div>
+</div>

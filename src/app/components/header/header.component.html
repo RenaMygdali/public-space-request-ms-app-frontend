@@ -1,0 +1,15 @@
+<nav class="navbar navbar-dark bg-success bg-opacity-50 d-flex justify-content-between">
+
+   <!--App Name-->
+   <a role="button" class="navbar-brand ms-3 fs-2" routerLink="">
+      My City
+   </a>
+
+   <!--Logout button-->
+   <div class="d-flex align-items-center">
+      <button *ngIf="isLoggedIn" (click)="logout()" class="btn btn-outline-light me-3 d-flex align-items-center gap-1">
+        <span class="material-icons">logout</span> Logout
+      </button>
+    </div>
+
+</nav>

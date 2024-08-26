@@ -1,0 +1,68 @@
+<div class="d-flex flex-column align-items-center mt-3 p-3 bg-light">
+   <p class="login-title mb-4">Please login</p>
+
+   <!-- loading spinner -->
+   <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+   
+   <!-- Φόρμα -->
+   <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="d-flex flex-column gap-3 w-75">
+      <div class="form-group mx-auto">
+         <div class="d-flex flex-column gap-3 mx-auto justify-content-center">
+
+            <!--Username-->
+            <div class="input d-flex flex-column">
+               <label for="username" class="label me-2">
+                  Username:
+               </label>
+               <input 
+                  type="text" 
+                  id="username" 
+                  class="form-control" 
+                  formControlName="username"
+                  autocomplete="username">
+               <div *ngIf="loginForm.get('username')?.invalid &&
+                           loginForm.get('username')?.touched" class="text-danger">
+               Insert your username
+               </div>
+            </div>
+
+            <!--Password-->
+            <div class="input d-flex flex-column">
+               <label for="password" class="label me-2">
+                  Password:
+               </label>
+               <input 
+                  type="password" 
+                  id="password" 
+                  class="form-control" 
+                  formControlName="password"
+                  autocomplete="password">
+               <div *ngIf="loginForm.get('password')?.invalid &&
+                           loginForm.get('password')?.touched" class="text-danger">
+               Insert your password
+               </div>
+            </div>
+
+         </div>
+      </div>
+      
+      <!--Login button-->
+      <div>
+         <button type="submit" class="btn btn-primary">
+            Login
+         </button>
+      </div>
+
+      <p class="signup-title mt-3 text-muted">If you don't have an account please 
+         <a class="link-primary" routerLink="/signup">
+               <span>sign up</span>
+         </a>
+      </p>
+
+      <!-- Error message display -->
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
+         {{ errorMessage }}
+      </div>
+
+   </form>
+</div>

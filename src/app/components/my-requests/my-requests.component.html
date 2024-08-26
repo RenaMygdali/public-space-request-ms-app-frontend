@@ -1,0 +1,75 @@
+<p class="fs-3 bg-light p-4">My Requests</p>
+<div class="departments-container ps-2">
+
+   <!--Select Filters-->
+   <div class="position-relative">
+      <div class="d-flex flex-row flex-wrap gap-1 border-1 border-dark-subtle mb-2 mt-4">
+         <!-- <p class="mx-5 border-title">Select Filters</p> -->
+         <label>
+         Title:
+         <input type="text" [(ngModel)]="filters.title" (input)="onFilterChange()" class="form-control" />
+         </label>
+         <label>
+         Status
+         <select [(ngModel)]="filters.status" (change)="onFilterChange()" class="form-select">
+            <option *ngFor="let status of statusList" [value]="status">
+               {{ status }}
+            </option>
+         </select>
+         </label>
+      </div>
+   </div>
+
+
+   <!--Table-->
+   <table class="table table-full-width">
+      <thead class="table-primary">
+        <tr>
+          <th class="text-wrap" scope="col" role="button" (click)="sortData('title')">
+            Title {{ sortSign('title') }}
+          </th>
+          <th class="text-wrap" scope="col" role="button" (click)="sortData('description')">
+            Description {{ sortSign('description') }}</th>
+          <th scope="col" role="button" (click)="sortData('status')">
+            Status {{ sortSign('status') }}</th>
+         <th role="button" (click)="sortData('createDate')">
+            Submitted at {{ sortSign('createDate') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of requests">
+          <td>{{ request.title }}</td>
+          <td>{{ request.description }}</td>
+          <td>{{ statusMapping[request.status] }}</td>
+          <td>{{ getFriendlyDate(request.createDate) }}</td>
+        </tr>
+      </tbody>
+   </table>
+
+   <div *ngIf="requests.length === 0 && !loading && !error" class="text-danger mb-2">
+      No requests found.
+   </div>
+
+   <div *ngIf="error" class="text-danger mb-2">
+      Error loading requests. Please try again.
+   </div>
+
+
+   <!--Page navigation-->
+   <div>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(1)" [disabled]="pageNumber === 1">
+         First
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 1">
+         Previous
+      </button>
+      <span class="m-2">Page {{ pageNumber }} of {{ totalPages }}</span>
+      <button class="btn btn-outline-secondary me-1" (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber === totalPages">
+         Next
+      </button>
+      <button class="btn btn-outline-secondary" (click)="goToPage(totalPages)" [disabled]="pageNumber === totalPages">
+         Last
+      </button>
+    </div>
+</div>
+

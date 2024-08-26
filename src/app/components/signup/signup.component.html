@@ -1,0 +1,265 @@
+<div class="d-flex flex-column align-items-center mt-3 p-3 bg-light">
+   <p class="signup-title mb-4">Please sign up to continue</p>
+      
+   <!-- Φόρμα -->
+   <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3 w-50">
+      <div class="form-group mx-auto">
+         <div class="d-flex flex-wrap gap-3 mx-auto justify-content-center">
+
+            <!-- Firstname -->
+            <div class="input-group d-flex flex-column">
+               <label for="firstname" class="label">
+                  Firstname:
+               </label>
+               <input 
+                  type="text" 
+                  id="firstname" 
+                  class="form-control" 
+                  formControlName="firstname" 
+                  (blur)="onBlur($event, 'firstname')" 
+                  (focus)="onFocus($event, 'firstname')">
+               <div *ngIf="signupForm.get('firstname')?.invalid" class="text-danger">
+                     Firstname should not exceed 50 characters.
+               </div>
+            </div>
+
+
+            <!-- Lastname -->
+            <div class="input-group d-flex flex-column">
+               <label for="lastname" class="label">
+                  Lastname:
+               </label>
+               <input 
+                  type="text" 
+                  id="lastname" 
+                  class="form-control" 
+                  formControlName="lastname" 
+                  (blur)="onBlur($event, 'lastname')" (focus)="onFocus($event, 'lastname')"
+               />
+               <div *ngIf="signupForm.get('lastname')?.invalid" class="text-danger">
+                  <div *ngIf="signupForm.get('lastname')?.touched &&
+                              signupForm.get('lastname')?.errors?.['required']">
+                     Lastname is required.
+                  </div>
+                  <div *ngIf="signupForm.get('lastname')?.errors?.['maxlength']">
+                     Lastname should not exceed 50 characters.
+                  </div>
+                  </div>
+            </div>
+
+
+            <!-- Email -->
+            <div class="input-group d-flex flex-column">
+               <label for="email" class="label">
+                  Email:
+               </label>
+               <input 
+                  type="text" 
+                  id="email" 
+                  class="form-control" 
+                  formControlName="email" 
+                  (blur)="onBlur($event, 'email'); checkDuplicateEmail()" 
+                  (focus)="onFocus($event, 'email')"
+               />
+               <div *ngIf="signupForm.get('email')?.invalid" class="text-danger">
+                  <div *ngIf="signupForm.get('email')?.touched && 
+                              signupForm.get('email')?.errors?.['required']">
+                     Email is required.
+                  </div>
+                  <div *ngIf="signupForm.get('email')?.touched &&
+                              signupForm.get('email')?.errors?.['email']">
+                     Invalid email address.
+                  </div>
+                  <div *ngIf="signupForm.get('email')?.touched &&
+                              signupForm.get('email')?.errors?.['duplicateEmail']">
+                     Email already exists. Choose another one.
+                  </div>
+                  <div *ngIf="signupForm.get('email')?.errors?.['maxlength']">
+                     Email should not exceed 100 characters.
+                  </div>
+               </div>
+            </div>
+            
+
+            <!-- Phone Number -->
+            <div class="input-group d-flex flex-column">
+               <label for="phoneNumber" class="label">
+                  Phone Number:
+               </label>
+               <input 
+                  type="text" 
+                  id="phoneNumber" 
+                  class="form-control" 
+                  formControlName="phoneNumber" 
+                  (blur)="onBlur($event, 'phoneNumber')"
+               />
+               <div *ngIf="signupForm.get('phoneNumber')?.invalid" class="text-danger">
+                  <div *ngIf="signupForm.get('phoneNumber')?.errors?.['pattern']">
+                     Phone Number must be numeric and include 10-15 digits.
+                  </div>
+               </div>
+            </div>
+
+
+            <!-- Username -->
+            <div class="input-group d-flex flex-column">
+               <label for="usernameSignup" class="label">
+                  Username:
+               </label>
+               <input 
+                  type="text" 
+                  id="usernameSignup" 
+                  class="form-control" 
+                  formControlName="usernameSignup" 
+                  autocomplete="username"
+                  (blur)="onBlur($event, 'usernameSignup'); checkDuplicateUsername()"
+                  (focus)="onFocus($event, 'usernameSignup')"
+               />
+               <div *ngIf="signupForm.get('usernameSignup')?.invalid" class="text-danger">
+                  <div *ngIf="signupForm.get('usernameSignup')?.touched && 
+                              signupForm.get('usernameSignup')?.errors?.['required']">
+                     Username is required.
+                  </div>
+                  <div *ngIf="signupForm.get('usernameSignup')?.errors?.['minlength']">
+                     Username should be at least 2 characters long.
+                  </div>
+                  <div *ngIf="signupForm.get('usernameSignup')?.errors?.['maxlength']">
+                     Username should not exceed 50 characters.
+                  </div>
+                  <div *ngIf="signupForm.get('usernameSignup')?.touched &&
+                              signupForm.get('usernameSignup')?.errors?.['duplicateUsername']">
+                     Username already exists. Choose another one.
+                  </div>
+               </div>
+            </div>
+
+            <!-- Password -->
+            <div class="input-group d-flex flex-column">
+               <label for="passwordSignup" class="label">
+                  Password:
+               </label>
+               <input 
+                  type="password" 
+                  id="passwordSignup" 
+                  class="form-control" 
+                  formControlName="passwordSignup" 
+                  autocomplete="new-password"
+                  (blur)="onBlur($event, 'passwordSignup')"
+                  (focus)="onFocus($event, 'passwordSignup')"
+               />
+               <div *ngIf="signupForm.get('passwordSignup')?.invalid" class="text-danger">
+                  <div *ngIf="signupForm.get('passwordSignup')?.touched &&
+                              signupForm.get('passwordSignup')?.errors?.['required']">
+                     Password is required.
+                  </div>
+                  <div *ngIf="signupForm.get('passwordSignup')?.errors?.['minlength']">
+                     Password should be at least 8 characters long.
+                  </div>
+                  <div *ngIf="signupForm.get('passwordSignup')?.errors?.['pattern']">
+                     Password must contain at least one uppercase & one lowercase letter, one number and one special character.
+                  </div>
+               </div>
+            </div>
+
+
+            <!-- Confirmation Password -->
+            <div class="input-group d-flex flex-column">
+               <label for="confirmPasswordSignup" class="label">
+                  Confirmation Password:
+               </label>
+               <input 
+                  type="password" 
+                  id="confirmPasswordSignup" 
+                  class="form-control" 
+                  formControlName="confirmPasswordSignup" 
+                  autocomplete="new-password"
+                  (blur)="onBlur($event, 'confirmPasswordSignup')"
+                  (focus)="onFocus($event, 'confirmPasswordSignup')"
+               />
+               <div *ngIf="signupForm.get('confirmPasswordSignup')?.invalid" class="text-danger">
+                  <div *ngIf="signupForm.get('confirmPasswordSignup')?.touched && 
+                              signupForm.get('confirmPasswordSignup')?.errors?.['required']">
+                     Confirmation password is required.
+                  </div>
+                  <div *ngIf="signupForm.get('confirmPasswordSignup')?.errors?.['passwordMismatch']">
+                     Confirmation password is missing or the two passwords differ.
+                  </div>
+               </div>
+            </div>
+
+
+            <!-- Role -->
+            <div class="input-group d-flex flex-column">
+               <label for="role" class="label">
+                  Role:
+               </label>
+               <select 
+                  id="role" 
+                  class="form-control form-select" 
+                  formControlName="role" 
+                  (blur)="onBlur($event, 'role')">
+                  <option value="" disabled>Select a role</option>
+                  <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+               </select>
+               <div *ngIf="signupForm.get('role')?.invalid && 
+                           signupForm.get('role')?.touched" class="text-danger">
+                  Role is required.
+               </div>
+            </div>
+
+
+            <!-- Department (enabled only if role is Officer)-->
+            <div class="input-group d-flex flex-column">
+               <label for="department" class="label">
+                  Department:
+               </label>
+               <select 
+                  id="department" 
+                  class="form-control form-select" 
+                  formControlName="department"  
+                  [disabled]="signupForm.get('role')?.value !== 'Officer'" 
+                  (blur)="onBlur($event, 'department')">
+               <option *ngFor="let department of departments" [value]="department.title">
+                  {{ department.title }}
+               </option>
+               </select>
+               <div *ngIf="signupForm.get('department')?.invalid" class="text-danger">
+                  <div *ngIf="signupForm.get('department')?.touched && 
+                              signupForm.get('department')?.errors?.['required']">
+                     Department is required for the role Officer.
+                  </div>
+                  <div *ngIf="signupForm.get('department')?.errors?.['maxlength']">
+                     Department title should not exceed 50 characters.
+                  </div>
+               </div>
+            </div>
+               
+
+         </div>
+      </div>
+      
+      <div class="text-center">
+         <button type="submit" class="btn btn-primary btn-signup">
+            Sign up
+         </button>
+      </div>
+
+      <p class="login-title text-muted">If you already have an account please
+         <a class="link-primary" routerLink="/login">
+            <span>login</span>
+         </a>
+      </p>
+
+   </form>
+
+   <!--Successful registration modal-->
+   <div *ngIf="showSuccessMessage" class="success-modal">
+      <div class="success-content">
+        <h2>SUCCESS</h2>
+        <p>Congratulations, your account has been successfully created.</p>
+        <button routerLink="/login" class="myBtn-continue">Continue</button>
+        <p>Select Continue to log in </p>
+      </div>
+   </div>
+
+</div>
