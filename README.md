@@ -1,17 +1,19 @@
 # Public Space Maintenance Request Management System (PSM-RMS)
 
-This project is a Public Space Maintenance Request Management System built with Angular. The application allows citizens to submit requests related to public cleanliness and green spaces, which are then managed by officers. Admins have oversight and control over the application.
+This project is the frontend of, an under construction, Public Space Maintenance Request Management System app built with Angular.
+The application allows citizens to submit requests related to public cleanliness and green spaces issues, which are then managed by officers.
+Admins have oversight and control over the application.
 
 ## Project Overview
 
 This application is designed to facilitate:
 
 - User **Authentication** and **Authorization** based on credentials and role.
-- **Citizens**: To submit requests for public space maintenance.
-- **Officers**: To review, manage, and respond to maintenance requests.
+- **Citizens**: To submit requests for public space maintenance issues.
+- **Officers**: To review and manage maintenance requests.
 - **Admins**: To oversee the system, manage users, and have control over various administrative functions.
 
-## Features (under construction)
+## Features
 
 - **Request Submission**: Citizens can create and submit requests for maintenance issues. They can also view a list of their submitted requests along with their status (pending, in progress, complete).
 - **Request Management**: Officers of the Municipality can view all the submitted requests and assign them to the relevant department.
@@ -53,7 +55,3 @@ To get more help on the Angular CLI use `ng help` or check out the [Angular CLI 
 ## Contributing
 
 If you want to contribute to this project, please fork the repository and submit a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
