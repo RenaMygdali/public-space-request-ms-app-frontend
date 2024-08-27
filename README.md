@@ -1,6 +1,6 @@
 # Public Space Maintenance Request Management System (PSM-RMS)
 
-This project is the frontend of a Public Space Maintenance Request Management System application built with Angular. <br> Τhe application allows citizens to submit requests related to public cleanliness and green spaces issues, which are then managed by officers. Admins have oversight and control over the application. <br> This app was developed as part of the educational program 'Coding Factory' of the Athens University of Economics and is not yet fully complete.
+This project is the frontend of a Public Space Maintenance Request Management System application built with Angular. <br> Τhe application allows citizens to submit requests related to public cleanliness and green spaces issues, which are then managed by officers of the Municipality. Admins have oversight and control over the application. <br> This app was developed as part of the educational program 'Coding Factory' of the Athens University of Economics and is not yet fully complete.
 
 ## Project Overview
 
